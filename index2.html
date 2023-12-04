@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="home2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+   function respondToSearchboxClick() {
+    var visual = document.querySelector(".visual")
+   var result = document.getElementById('results');
+   var dataset = 
+   [  
+   {  
+      "title":"Search for User",
+      "path":"file:///F:/Xammp/htdocs/Help/Guest%20Details%20How%20to%20Search%20for%20a%20User.pdf"
+   },
+   {  
+      "title":"Look Up Order",
+      "path":"file:///F:/Xammp/htdocs/Help/Helper%20Stuff%20How%20to%20Search%20for%20a%20Person.pdf"
+   },
+   {  
+      "title":"Checkout",
+      "path":"about/meet-the-team/alice/"
+   },
+   {  
+      "title":"Timeslots",
+      "path":"about/meet-the-team/bob/"
+   },
+   {  
+      "title":"Admin Portal",
+      "path":"about/meet-the-team/chris/"
+   }
+]
+    var options = {
+	shouldSort: true,
+	matchAllTokens: true,
+    keys: ["title", "path"]
+    };
+    var query = document.querySelector("#search");
+    const fuse = new Fuse(dataset, options);
+    var resultJSON = fuse.search(query.value)
+    console.log(resultJSON);
+    result.value = JSON.stringify(resultJSON, null, 3);
+    renderVisual(resultJSON);
+    function renderVisual (resultJSON) {
+        let html = resultJSON.reduce((sum, curr) => {
+		    const {title, path} = curr;
+		    return sum  + `
+            <a href="${path}" target="_blank"><div class="item">
+            <h4>${title}</h4>
+            </div></a>
+            `
+	        }, '');
+            visual.innerHTML = html;
+    }
+    }
+    
+
+
+            
+
+/*        $(document).ready(function () {
+            $.getJSON('/help/index.json', function (response) {
+                const fuse = new Fuse(response, {
+                    keys: ['path', 'title'],
+                    shouldSort: true
+                });
+                $('#search').on('keyup', function () {
+                    var result = fuse.search($(this).val());
+                    console.log(result);
+                    
+                    // Output it
+                    var resultdiv = document.getElementById('searchresults');
+                    if (result.length === 0) {
+                        // Hide results
+                        resultdiv.hide();
+                    } else {
+                        // Show results
+                        resultdiv.empty();
+                        for (var item in result) {
+                            var searchitem = '<li>' + result[item].title + '</li>';
+                            resultdiv.append(searchitem);
+                           
+                        }
+                        resultdiv.show();
+                    }
+                });
+            });
+        }); */ 
+    </script>
+</head>
+
+<body class="bg-color">
+    <div class="container-fluid">
+        
+        <input type="search" class="search" id="search" onkeyup="respondToSearchboxClick()">
+    
+        <div id="results">
+            <div class="visual"></div>
+            
+    </div>
+    </div>
+</body>
+
+
+</html>
